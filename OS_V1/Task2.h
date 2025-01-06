@@ -7,8 +7,8 @@
 enum State2 { INIT2, STATE2_1, STATE2_2 };
 
 // Function declaration for Task 1
-void task2();
-void initTask2();
+void sendMessageTask();
+void initsendMessageTask();
 
 extern State2 state2;
 

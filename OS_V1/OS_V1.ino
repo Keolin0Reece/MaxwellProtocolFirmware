@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
-#include <C:\Users\impul\Documents\ArduinoOS\OS_V1\Task1.h>
+#include "Task1.h"
+#include "Task2.h"
 
 // Task structure
 struct Task {
@@ -13,8 +14,8 @@ struct Task {
 // Task array
 const uint8_t numTasks = 1;
 Task tasks[numTasks] = {
-    {task1, 250, 0} // Task 1 runs every 1000 ms
-    //{task2, 250, 0},  // Task 2 runs every 500 ms
+    //{DOITask, 250, 0}, // Task 1 runs every 1000 ms
+    {sendMessageTask, 250, 0}  // Task 2 runs every 500 ms
     //{task3, 250, 0}  // Task 3 runs every 2000 ms
 };
 
@@ -26,8 +27,8 @@ void setup() {
     Serial.begin(9600);
 
     // Initialize state machines
-    initTask1();
-    //initTask2();
+    //initDOITask();
+    initsendMessageTask();
     //initTask3();
 
     lastUpdateTime = millis();

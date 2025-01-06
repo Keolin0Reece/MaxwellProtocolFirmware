@@ -1,16 +1,16 @@
 #include "Task1.h"
 
 State1 state1; // Initialize the state machine for Task 1
+const int pin = 2; // Pin to read input
+static bool lastState;
 
-void initTask1() {
+void initDOITask() {
     state1 = INIT1;
+    pinMode(pin, INPUT);
+    lastState = LOW;
 }
 
-void task1() {
-    const int pin = 2; // Pin to read input
-    pinMode(pin, INPUT);
-    static bool lastState = LOW;
-
+void DOITask() {
     switch (state1) {
         case INIT1:
             Serial.println("Task 1 INIT");
