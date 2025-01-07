@@ -10,7 +10,12 @@ byte calculateChecksum(byte messageID, byte* data, byte dataLength) {
 }
 
 // Function to send the message as a single byte array
-void sendMessage(byte messageID, byte* data, byte dataLength) {
+void sendMessage(byte messageID, byte* data) {
+    byte dataLength = 0;
+    while (data[dataLength] != '\0') {
+        dataLength++; 
+    }
+
     byte messageLength = 3 + dataLength + 1;  // Total message length (Header + Data + Checksum)
     byte messageTypeID = 0;  // Fixed value for Message Type ID
     
@@ -35,4 +40,8 @@ void sendMessage(byte messageID, byte* data, byte dataLength) {
     // Send the entire message array at once
     Serial.write(message, messageLength);
     Serial.write('\n');   
+}
+
+int decodeMessage(byte* message) {
+  
 }

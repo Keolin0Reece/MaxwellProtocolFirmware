@@ -7,6 +7,8 @@
 byte calculateChecksum(byte messageID, byte* data, byte dataLength);
 
 // Function to send the message as a single byte array
-void sendMessage(byte messageID, byte* data, byte dataLength);
+void sendMessage(byte messageID, byte* data);
+
+int decodeMessage(byte* message);
 
 #endif // MESSAGEUTILS_H

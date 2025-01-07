@@ -1,34 +1,30 @@
 #include "Task1.h"
+  #include "MessageUtils.h"
 
 State1 state1; // Initialize the state machine for Task 1
-const int pin = 2; // Pin to read input
-static bool lastState;
+const int pin = 3; // Pin to read input
+char* state = "0";
 
 void initDOITask() {
     state1 = INIT1;
-    pinMode(pin, INPUT);
-    lastState = LOW;
+    DDRD |= (1 << DDD3);  // Set bit 3 of DDRD to 1 (output)
 }
 
 void DOITask() {
     switch (state1) {
         case INIT1:
-            Serial.println("Task 1 INIT");
+            //Serial.println("Task 1 INIT");
             state1 = STATE1_1;
             break;
         case STATE1_1: {
-            bool currentState = digitalRead(pin);
-            if (currentState != lastState) {
-                lastState = currentState;
-                Serial.print("Task 1 Pin State: ");
-                Serial.println(currentState ? "HIGH" : "LOW");
-            }
-            state1 = STATE1_2;
+            state1 = STATE1_1;
             break;
         }
         case STATE1_2:
-            //Serial.println("Task 1 State 2: Sending status");
-            //Serial.println(lastState ? "on" : "off");
+            PORTD ^= (1 << PD3);  // XOR PD3 with 1 (this will toggle the pin)
+            bool currentState = digitalRead(pin);
+            state = currentState ? "1" : "0";
+            sendMessage(1, state);
             state1 = STATE1_1;
             break;
     }

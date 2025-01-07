@@ -15,9 +15,7 @@ void sendMessageTask() {
 
         case STATE2_1:
             // Send the message
-            //sendMessage(messageID, data, dataLength);
-            sendMessage(0,"He",2);
-            //Serial.println("Hello");
+            //sendMessage((byte) 1,"102");
 
             // Transition to the next state
             state2 = STATE2_2;

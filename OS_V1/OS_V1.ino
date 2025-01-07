@@ -3,6 +3,9 @@
 #include <avr/interrupt.h>
 #include "Task1.h"
 #include "Task2.h"
+#include "Task3.h"
+#include "SerialHandler.h"
+#include "Protocol.h"
 
 // Task structure
 struct Task {
@@ -14,9 +17,9 @@ struct Task {
 // Task array
 const uint8_t numTasks = 1;
 Task tasks[numTasks] = {
-    //{DOITask, 250, 0}, // Task 1 runs every 1000 ms
-    {sendMessageTask, 250, 0}  // Task 2 runs every 500 ms
-    //{task3, 250, 0}  // Task 3 runs every 2000 ms
+    {DOITask, 250, 0} // Task 1 runs every 1000 ms
+    //{sendMessageTask, 250, 0}  // Task 2 runs every 500 ms
+    //{StreamADC, 250, 0}  // Task 3 runs every 2000 ms
 };
 
 // Time tracking
@@ -27,9 +30,9 @@ void setup() {
     Serial.begin(9600);
 
     // Initialize state machines
-    //initDOITask();
-    initsendMessageTask();
-    //initTask3();
+    initDOITask();
+    //initsendMessageTask();
+    //initStreamADC();
 
     lastUpdateTime = millis();
 
@@ -46,6 +49,12 @@ void setup() {
     TCCR1B |= (1 << CS12);  // Set 256 prescaler
     TIMSK1 |= (1 << OCIE1A); // Enable Timer1 compare interrupt
     interrupts();
+
+    uint8_t buffer[10];
+    ProtocolMessage_t message, decodedMessage;
+    message.messageID = messageID;
+    message.data.setPinData.pinValue = intValue;
+    
 }
 
 ISR(TIMER1_COMPA_vect) {
@@ -70,6 +79,9 @@ void loop() {
 
         lastUpdateTime = currentTime;
     }
+
+    // Handle serial data without blocking
+    handleSerialInput();
 
     // Sleep until the next interrupt
     sleep_enable();
