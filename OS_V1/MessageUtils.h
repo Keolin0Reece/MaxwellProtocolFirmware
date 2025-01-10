@@ -2,13 +2,14 @@
 #define MESSAGEUTILS_H
 
 #include <Arduino.h>
+#include "ProtocolMessage.h"
 
 // Function to calculate checksum
 byte calculateChecksum(byte messageID, byte* data, byte dataLength);
 
 // Function to send the message as a single byte array
-void sendMessage(byte messageID, byte* data);
+void sendMessage(byte messageID, byte* data, byte length);
 
-int decodeMessage(byte* message);
+ProtocolMessage decodeMessage(byte* message);
 
 #endif // MESSAGEUTILS_H

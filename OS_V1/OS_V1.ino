@@ -15,10 +15,10 @@ struct Task {
 };
 
 // Task array
-const uint8_t numTasks = 1;
+const uint8_t numTasks = 2;
 Task tasks[numTasks] = {
-    {DOITask, 250, 0} // Task 1 runs every 1000 ms
-    //{sendMessageTask, 250, 0}  // Task 2 runs every 500 ms
+    {DOITask, 250, 0}, // Task 1 runs every 1000 ms
+    {sendMessageTask, 500, 0}  // Task 2 runs every 500 ms
     //{StreamADC, 250, 0}  // Task 3 runs every 2000 ms
 };
 
@@ -31,8 +31,9 @@ void setup() {
 
     // Initialize state machines
     initDOITask();
-    //initsendMessageTask();
+    initsendMessageTask();
     //initStreamADC();
+    pinMode(3, OUTPUT);
 
     lastUpdateTime = millis();
 
@@ -50,11 +51,6 @@ void setup() {
     TIMSK1 |= (1 << OCIE1A); // Enable Timer1 compare interrupt
     interrupts();
 
-    uint8_t buffer[10];
-    ProtocolMessage_t message, decodedMessage;
-    message.messageID = messageID;
-    message.data.setPinData.pinValue = intValue;
-    
 }
 
 ISR(TIMER1_COMPA_vect) {

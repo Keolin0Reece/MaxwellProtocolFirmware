@@ -1,4 +1,5 @@
 #include "MessageUtils.h"
+#include "ProtocolMessage.h"
 
 // Function to calculate checksum: sum of Message ID and Data bytes, mod 255
 byte calculateChecksum(byte messageID, byte* data, byte dataLength) {
@@ -10,11 +11,8 @@ byte calculateChecksum(byte messageID, byte* data, byte dataLength) {
 }
 
 // Function to send the message as a single byte array
-void sendMessage(byte messageID, byte* data) {
-    byte dataLength = 0;
-    while (data[dataLength] != '\0') {
-        dataLength++; 
-    }
+void sendMessage(byte messageID, byte* data, byte length) {
+    byte dataLength = length;
 
     byte messageLength = 3 + dataLength + 1;  // Total message length (Header + Data + Checksum)
     byte messageTypeID = 0;  // Fixed value for Message Type ID
@@ -42,6 +40,27 @@ void sendMessage(byte messageID, byte* data) {
     Serial.write('\n');   
 }
 
-int decodeMessage(byte* message) {
+ProtocolMessage decodeMessage(byte* message) {
+  byte dataLength = 0;
+  while (message[dataLength] != '\0') {
+        dataLength++; 
+    }
+  byte messageID = message[0];
+  byte messageLength = message[1];
+  byte messageTypeID = message[2];
+
+  byte* data = new byte[messageLength];
+  memcpy(data, message + 3, messageLength);
+
+  byte checkSum = message[dataLength - 1];
+  bool isValid = checkSum == calculateChecksum(messageID, data, dataLength);
   
+  ProtocolMessage protocolM;
+  protocolM.MessageID = messageID;
+  protocolM.MessageLength = messageLength;     // Length of the data array
+  protocolM.MessageTypeID = messageTypeID;     // Example Type ID
+  protocolM.Data = data;
+  protocolM.Checksum = checkSum;
+  protocolM.IsValidChecksum = isValid;
+
 }

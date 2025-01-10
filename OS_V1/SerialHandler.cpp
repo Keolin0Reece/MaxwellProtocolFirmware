@@ -16,18 +16,9 @@ void handleSerialInput() {
 
         // Check for newline or carriage return as the end of the string
         if (incomingByte == '\n' || incomingByte == '\r') {
+            //proMess = decodeMessage(inputBuffer);
+            state1 = STATE1_2;
             bufferIndex = 0; // Reset the buffer index for the next string
-            switch(inputBuffer[0]){
-              case 0x01:
-                state1 = STATE1_2;
-                break;
-              case 0x02:
-
-                break;
-              case 0x03:
-
-                break;
-            }
         } else {
             // Add the byte to the buffer if there's space
             if (bufferIndex < BUFFER_SIZE - 1) {
