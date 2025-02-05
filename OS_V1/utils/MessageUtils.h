@@ -2,7 +2,7 @@
 #define MESSAGEUTILS_H
 
 #include <Arduino.h>
-#include "ProtocolMessage.h"
+#include "../protocol/ProtocolMessage.h"
 
 // Function to calculate checksum
 byte calculateChecksum(byte messageID, byte* data, byte dataLength);

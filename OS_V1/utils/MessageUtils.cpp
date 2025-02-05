@@ -1,5 +1,5 @@
 #include "MessageUtils.h"
-#include "ProtocolMessage.h"
+#include "../protocol/ProtocolMessage.h"
 
 // Function to calculate checksum: sum of Message ID and Data bytes, mod 255
 byte calculateChecksum(byte messageID, byte* data, byte dataLength) {
@@ -62,5 +62,7 @@ ProtocolMessage decodeMessage(byte* message) {
   protocolM.Data = data;
   protocolM.Checksum = checkSum;
   protocolM.IsValidChecksum = isValid;
+
+  return protocolM;
 
 }
