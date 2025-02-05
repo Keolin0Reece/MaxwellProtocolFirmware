@@ -22,8 +22,12 @@ This project implements a custom communication protocol for Arduino, featuring d
 
 ### Message Format
 Each message consists of:
-- Message ID (1 byte)
-- Data payload (4 bytes)
+- `MessageID` (1 byte) - Message identifier
+- `MessageLength` (1 byte) - Length of the message
+- `MessageTypeID` (1 byte) - Message type
+- `Data` (pointer to byte array) - Data payload
+- `Checksum` (1 byte) - Integrity check
+- `IsValidChecksum` (boolean) - Flag indicating checksum validity
 
 ### Message Types
 1. `MESSAGE_SET_PIN`: Set digital pin state
