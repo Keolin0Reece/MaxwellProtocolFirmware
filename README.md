@@ -14,8 +14,12 @@ This project implements a custom communication protocol for Arduino, featuring d
 │   ├── Task2.h         # Message Sending & Analog Reading
 │   └── Task2.cpp
 ├── utils/
+│   ├── MessageUtils.cpp
 │   └── MessageUtils.h
-└── SerialHandler.h     # Serial Communication Interface
+├── serial/
+│   ├── SerialHandler.h     # Serial Communication Interface
+│   └── SerialHandler.cpp
+└── OS_V1.ino
 ```
 
 ## Protocol Specification
