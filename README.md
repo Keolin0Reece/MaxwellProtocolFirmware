@@ -7,14 +7,15 @@ This project implements a custom communication protocol for Arduino, featuring d
 ```
 ├── protocol/
 │   ├── protocol.h
-│   └── protocol.cpp
+│   ├── ProtocolMessage.h    # Class defining a message as an array of bytes
+│   └── protocol.cpp    # Not used
 ├── tasks/
 │   ├── Task1.h         # Digital Output Interface
 │   ├── Task1.cpp
 │   ├── Task2.h         # Message Sending & Analog Reading
 │   └── Task2.cpp
 ├── utils/
-│   ├── MessageUtils.cpp
+│   ├── MessageUtils.cpp    # Handles the encoding and decoding of the messages
 │   └── MessageUtils.h
 ├── serial/
 │   ├── SerialHandler.h     # Serial Communication Interface
@@ -32,12 +33,6 @@ Each message consists of:
 - `Data` (pointer to byte array) - Data payload
 - `Checksum` (1 byte) - Integrity check
 - `IsValidChecksum` (boolean) - Flag indicating checksum validity
-
-### Message Types
-1. `MESSAGE_SET_PIN`: Set digital pin state
-2. `MESSAGE_GET_PIN`: Read digital pin state
-3. `MESSAGE_GET_ADC`: Read analog value
-4. `MESSAGE_STREAM_ADC`: Stream analog readings
 
 ### Data Encoding
 - Integer values: Little-endian format (4 bytes)
@@ -70,28 +65,22 @@ Each message consists of:
 
 ### Encoding Functions
 ```cpp
-int encodeMessage(const ProtocolMessage_t* message, uint8_t* buffer, uint16_t bufferLength)
+void sendMessage(byte messageID, byte* data, byte length)
 ```
 - Encodes structured messages into byte buffers
 - Implements message-specific encoding based on message ID
-- Returns number of bytes written or -1 on failure
+- Sends the encoded message to the serial bus
 
 ### Decoding Functions
 ```cpp
-int decodeMessage(const uint8_t* buffer, uint16_t bufferLength, ProtocolMessage_t* message)
+ProtocolMessage decodeMessage(byte* message)
 ```
 - Decodes byte buffers into structured messages
 - Validates message format and length
-- Returns 0 on success, -1 on failure
-
-### Helper Functions
-- `writeIntToBuffer`: Writes integers in little-endian format
-- `readIntFromBuffer`: Reads little-endian integers
-- `writeFloatToBuffer`: Writes IEEE 754 float values
-- `readFloatFromBuffer`: Reads IEEE 754 float values
+- Returns the class ProtocolMessage that has all the information decoded from the byte array
 
 ## Technical Notes
-- Minimum message size: 5 bytes (1 byte ID + 4 bytes data)
+- Minimum message size: 4 bytes (1 byte ID + 1 byte MessageLength + 1 byte MessageTypeID + 0 byte data + 1 byte CheckSum)
 - Buffer overflow protection implemented in serial handler
 - Direct port manipulation used for efficient digital I/O
 - Big-endian byte order used for analog value transmission
